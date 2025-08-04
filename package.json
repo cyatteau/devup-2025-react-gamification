@@ -1,0 +1,38 @@
+{
+  "name": "mappy-stats-app",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@arcgis/core": "^4.30.9",
+    "@arcgis/map-components-react": "^4.31.6",
+    "@esri/arcgis-rest-demographics": "^4.0.3",
+    "@esri/arcgis-rest-geocoding": "^4.0.3",
+    "@esri/arcgis-rest-request": "^4.2.3",
+    "boring-avatars": "^1.11.2",
+    "prop-types": "^15.8.1",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "react-router-dom": "^7.7.1",
+    "react-share": "^5.1.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "eslint": "^8.57.0",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "eslint-plugin-react-refresh": "^0.4.7",
+    "vite": "^5.4.19",
+    "whatwg-fetch": "^3.6.20"
+  },
+  "author": "Courtney Yatteau",
+  "license": "ISC"
+}

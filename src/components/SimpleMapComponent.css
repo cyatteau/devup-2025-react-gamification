@@ -1,0 +1,7 @@
+@import "https://js.arcgis.com/4.30/@arcgis/core/assets/esri/themes/light/main.css";
+
+.typeTitle {
+  text-align: center;
+  font-size: 22px;
+  color: #03254a;
+}

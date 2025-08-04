@@ -1,0 +1,15 @@
+.achievement-popup {
+  position: fixed;
+  top: 17%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: linear-gradient(135deg, #008080, #00b3b3);
+  color: #fff;
+  padding: 20px 25px;
+  border-radius: 8px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+  z-index: 1000;
+  max-width: 320px;
+  text-align: center;
+  font-family: "Helvetica Neue", Arial, sans-serif;
+}

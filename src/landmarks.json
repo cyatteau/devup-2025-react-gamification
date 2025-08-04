@@ -1,0 +1,94 @@
+{
+  "landmarks": [
+    {
+      "name": "St. Charles Convention Center (DevUp HQ)",
+      "address": "1 Convention Center Plaza, St. Charles, MO 63303",
+      "coordinates": {
+        "latitude": 38.758,
+        "longitude": -90.501
+      },
+      "description": "The main venue for DevUp 2025—your starting point for all quests!",
+      "quiz": [
+        {
+          "question": "Which river is nearest to the St. Charles Convention Center?",
+          "options": ["Missouri", "Mississippi", "Illinois", "Ohio"],
+          "answer": "Missouri"
+        }
+      ]
+    },
+    {
+      "name": "Embassy Suites St. Charles",
+      "address": "2 Convention Center Plaza, St. Charles, MO 63303",
+      "coordinates": {
+        "latitude": 38.7585,
+        "longitude": -90.5033
+      },
+      "description": "The connected hotel—perfect for DevUp attendees grabbing coffee between sessions.",
+      "quiz": [
+        {
+          "question": "Which meal is complimentary for Embassy Suites guests?",
+          "options": ["Breakfast", "Lunch", "Dinner", "None"],
+          "answer": "Breakfast"
+        }
+      ]
+    },
+    {
+      "name": "Streets of St. Charles",
+      "address": "1650 Beale St, St. Charles, MO 63303",
+      "coordinates": {
+        "latitude": 38.764,
+        "longitude": -90.4982
+      },
+      "description": "A walkable district with restaurants, shops, and a movie theater—just north of the convention center.",
+      "quiz": [
+        {
+          "question": "Which attraction is NOT located at Streets of St. Charles?",
+          "options": [
+            "Bowling alley",
+            "Cinema",
+            "Restaurants",
+            "Retail stores"
+          ],
+          "answer": "Bowling alley"
+        }
+      ]
+    },
+    {
+      "name": "Ameristar Casino Resort Spa",
+      "address": "1 Ameristar Blvd, St. Charles, MO 63301",
+      "coordinates": {
+        "latitude": 38.7673,
+        "longitude": -90.4814
+      },
+      "description": "Casino, dining, and nightlife situated on the Missouri River—about a mile east of DevUp HQ.",
+      "quiz": [
+        {
+          "question": "Which amenity can you find at Ameristar St. Charles?",
+          "options": [
+            "Casino gaming",
+            "Indoor theme park",
+            "Ski slope",
+            "Beach bar"
+          ],
+          "answer": "Casino gaming"
+        }
+      ]
+    },
+    {
+      "name": "Katy Trail – Frontier Park Trailhead",
+      "address": "500 S Riverside Dr, St. Charles, MO 63301",
+      "coordinates": {
+        "latitude": 38.775,
+        "longitude": -90.4801
+      },
+      "description": "Eastern trailhead of the 240-mile Katy Trail—ideal for a scenic walk or bike ride along the Missouri River.",
+      "quiz": [
+        {
+          "question": "The Katy Trail follows which former railroad’s right-of-way?",
+          "options": ["MKT (Katy)", "Union Pacific", "B&O", "Santa Fe"],
+          "answer": "MKT (Katy)"
+        }
+      ]
+    }
+  ]
+}

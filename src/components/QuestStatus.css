@@ -1,0 +1,46 @@
+/* src/components/QuestStatus.css */
+
+/* Main quest status banner (keeps its original position) */
+.quest-progress {
+  border: 2px solid #ffc107;
+  padding: 15px 0;
+  box-shadow: 0 0 15px #ffc107;
+  background-color: rgba(33, 33, 33, 0.9);
+  color: white;
+  border-radius: 10px;
+  z-index: 3;          /* stays above the map visually */
+  text-align: center;
+}
+
+/* Wrapper for the progress bar */
+.progress-bar-container {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 5px;
+  overflow: hidden;
+  margin: 10px auto;
+  width: 80%;
+  height: 20px;
+}
+
+/* Animated fill inside the progress bar */
+.progress-bar {
+  height: 100%;
+  background-color: #ffc107;
+  transition: width 0.5s ease;
+}
+
+/* If you later add buttons inside the quest banner, re-enable clicks on them */
+.quest-progress button {
+  pointer-events: auto;
+}
+
+.dimmed-content {
+  filter: brightness(0.8);
+  pointer-events: none;      /* block by default */
+}
+
+/* Re-enable pointer events on the map only */
+.map-container,
+.map-container * {
+  pointer-events: auto !important;
+}
