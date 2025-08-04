@@ -40,7 +40,6 @@ This live demo app illustrates core concepts from the talk:
 
 1. **Location‑Based Quests** – Track your location to unlock nearby challenges.  
 2. **XP & Achievements** – Earn points, badges, and streak rewards.  
-3. **AI‑Generated Quizzes** – Dynamic quiz questions based on ArcGIS demographics.  
 4. **Performance Optimizations** – `useMemo`, `React.memo`, and React Compiler examples.
 
 ---
