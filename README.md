@@ -20,7 +20,7 @@ Unlock the power of gamification in your React applications to create compelling
 - **Presenter:** Courtney Yatteau, Developer Advocate, Esri  
 - **Contact:** courtney.yatteau@gmail.com  
 
-**Slides:** [Link to Slides](URL_TO_BE_ADDED)
+**Slides:** [Link to Slides]([URL_TO_BE_ADDED](https://github.com/cyatteau/devup-2025-react-gamification/blob/main/Slides.pdf))
 
 ---
 
