@@ -1,6 +1,6 @@
 # React and the Art of Gamification
 
-A guide to my Dev Up 2025 session and demo repository.
+A guide to my Dev Up 2025 session repository.
 
 ---
 
@@ -15,12 +15,11 @@ Unlock the power of gamification in your React applications to create compelling
 - **Title:** React and the Art of Gamification  
 - **Event:** Dev Up 2025  
 - **Date & Time:** Thursday, August 7, 2025 • 9:45–10:45 am (UTC‑05:00)  
-- **Session Format:** 1‑Hour Talk  
 - **Level:** Intermediate  
 - **Presenter:** Courtney Yatteau, Developer Advocate, Esri  
 - **Contact:** courtney.yatteau@gmail.com  
 
-**Slides:** [Link to Slides]([URL_TO_BE_ADDED](https://github.com/cyatteau/devup-2025-react-gamification/blob/main/Slides.pdf))
+**Slides:** [Link to Slides](https://github.com/cyatteau/devup-2025-react-gamification/blob/main/Slides.pdf)
 
 ---
 
@@ -70,7 +69,7 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ---
 
-## Configuration
+### Configuration
 
 Create a `.env` file in the project root:
 
@@ -78,12 +77,22 @@ Create a `.env` file in the project root:
 REACT_APP_ARCGIS_API_KEY=YOUR_ARCGIS_API_KEY
 ```
 
+
+---
+## 💥 Meme App Demo
+
+A quick, live “Draw-to-Meme Battle”:
+
+- **Draw** on canvas → **AI** generates 2 witty captions  
+- **Confetti** & XP icons celebrate your pick  
+- **Submit** once, then **vote** (max 3 votes) on the live Meme Wall  
+
+### Quick Start
+
+> Download the exact demo build: see Releases › [meme-app.zip](https://github.com/cyatteau/devup-2025-react-gamification/blob/main/meme-app.zip)
+
+```bash
+cp .env.local.example .env.local   # add your Firebase config & API keys
+```
 ---
 
-## Deployment
-
-To publish the demo (e.g., GitHub Pages, Vercel, Netlify):
-
-1. Build: `npm run build`  
-2. Deploy the `build/` folder to your static host  
-3. (Optional) Set `homepage` in `package.json` for GitHub Pages.
