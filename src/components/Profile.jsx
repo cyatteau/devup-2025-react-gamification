@@ -420,7 +420,7 @@ const Profile = () => {
                   ) : (
                     <option key={option.id} value={option.id} disabled>
                       {option.name} - Locked (
-                      {option.id === "456d1df3810e482b8abcb2aa0440d6ac"
+                      {option.id === "arcgis/community"
                         ? `Earn 1 achievement to unlock`
                         : `Earn 2 achievements to unlock`}
                       )

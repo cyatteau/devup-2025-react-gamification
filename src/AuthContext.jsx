@@ -11,7 +11,7 @@ export const AuthProvider = ({ children }) => {
   });
 
   const login = (username, password) => {
-    if (username === "user" && password === "password") {
+    if (username === "test" && password === "test") {
       const user = {
         username,
         achievements: [],

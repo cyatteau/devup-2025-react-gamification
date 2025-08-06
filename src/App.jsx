@@ -27,6 +27,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Root from "./components/Root";
 import QuestStatus from "./components/QuestStatus";
 import { loadLandmarks } from "./utils";
+import InfoModal from "./components/InfoModal"; // make sure this import exists
 
 // Lazy–loaded components
 const MapViewComponent = lazy(() => import("./components/MapViewComponent"));
@@ -56,11 +57,11 @@ function AppContent() {
   const navigate = useNavigate();
   const location = useLocation();
   const [landmarks, setLandmarks] = useState([]);
-  const [showCloseQuestModal, setShowCloseQuestModal] = useState(false);
   const [selectedBasemap, setSelectedBasemap] = useState(
     localStorage.getItem("selectedBasemap") ||
-      "f5023edabfee4dd68f2e3f87e2a6c14d"
+      "273bf8d5c8ac400183fc24e109d20bcf"
   );
+  const [selectedLandmark, setSelectedLandmark] = useState(null);
 
   useEffect(() => {
     const loadedLandmarks = loadLandmarks();
@@ -183,6 +184,14 @@ function AppContent() {
         const { latitude, longitude } = position.coords;
         const dateVisited = new Date().toISOString();
         setCurrentLocation({ latitude, longitude });
+        setSelectedLandmark(null);
+        dispatch({
+          type: "SET_LOCATION",
+          payload: {
+            latitude: latitude,
+            longitude: longitude,
+          },
+        });
         dispatch({ type: "SET_LOCATION", payload: { latitude, longitude } });
         dispatch({ type: "SET_SUBMITTED", payload: true });
         setTracking(true);
@@ -208,6 +217,9 @@ function AppContent() {
             return distance <= 100000;
           });
           setNearbyLandmarks(filteredLandmarks);
+          setNearbyLandmarks(filteredLandmarks);
+          setSelectedLandmark(null);
+          setQuestEnabled(filteredLandmarks.length > 0);
           setQuestEnabled(filteredLandmarks.length > 0);
         } catch (error) {
           console.error("Failed to fetch demographic data or address:", error);
@@ -222,68 +234,63 @@ function AppContent() {
   const handleTrackNewLocation = useCallback(async () => {
     const landmark = nearbyLandmarks[currentLandmarkIndex];
     if (!landmark) return;
-    const { coordinates } = landmark;
-    setCurrentLocation(coordinates);
+
+    // 1) Immediately open the modal for this landmark
+    const { latitude, longitude } = landmark.coordinates;
+    const key = `${latitude}_${longitude}`;
+    setSelectedLandmark({
+      id: key,
+      name: landmark.name,
+      address: landmark.address,
+      description: landmark.description,
+    });
+
+    // 2) Then move the map & trigger your existing geocode/badge logic
+    setCurrentLocation({ latitude, longitude });
     dispatch({
       type: "SET_LOCATION",
-      payload: {
-        latitude: coordinates.latitude,
-        longitude: coordinates.longitude,
-      },
+      payload: { latitude, longitude },
     });
+    setTracking(true);
+
     try {
-      const data = await fetchData(coordinates.latitude, coordinates.longitude);
-      if (data) {
-        data.badges.forEach((badge) => {
-          earnBadge(badge);
-        });
-      }
-      const response = await reverseGeocode(
-        [coordinates.longitude, coordinates.latitude],
-        {
-          authentication: ApiKeyManager.fromKey(apiKey),
-        }
-      );
-      const address = response.address.LongLabel;
-      const dateVisited = new Date().toISOString();
-      saveVisitedLocation({
-        latitude: coordinates.latitude,
-        longitude: coordinates.longitude,
-        address,
-        dateVisited,
+      const data = await fetchData(latitude, longitude);
+      data?.badges.forEach((badge) => earnBadge(badge));
+      const response = await reverseGeocode([longitude, latitude], {
+        authentication: ApiKeyManager.fromKey(apiKey),
       });
+      const address = response.address.LongLabel;
+      saveVisitedLocation({
+        latitude,
+        longitude,
+        address,
+        dateVisited: new Date().toISOString(),
+      });
+
+      // mark this landmark found
       setFoundLandmarks((prev) => {
-        const updated = [...prev];
-        if (!updated.includes(landmark)) {
-          updated.push(landmark);
-        }
-        return updated;
+        if (prev.find((l) => l === landmark)) return prev;
+        return [...prev, landmark];
       });
       localStorage.setItem(
         "foundLandmarks",
         JSON.stringify([...foundLandmarks, landmark])
       );
       if (foundLandmarks.length + 1 === nearbyLandmarks.length) {
-        setShowCongrats(true);
-        setTimeout(() => {
-          handleEndQuest();
-        }, 3000);
       }
-    } catch (error) {
-      console.error("Failed to fetch demographic data or address:", error);
+    } catch (err) {
+      console.error(err);
     }
-    setCurrentLandmarkIndex((prevIndex) =>
-      prevIndex + 1 < nearbyLandmarks.length ? prevIndex + 1 : prevIndex
-    );
-    setTracking(true);
+
+    setCurrentLandmarkIndex((i) => Math.min(i + 1, nearbyLandmarks.length - 1));
   }, [
-    dispatch,
-    nearbyLandmarks,
     currentLandmarkIndex,
+    nearbyLandmarks,
     fetchData,
     earnBadge,
     saveVisitedLocation,
     foundLandmarks,
+    dispatch,
   ]);
 
   const handleStartQuest = () => {
@@ -298,11 +305,8 @@ function AppContent() {
     }
   };
 
-  const handleEndQuestButtonClick = () => {
-    setShowCloseQuestModal(true);
-  };
-
   const handleEndQuest = () => {
+    setSelectedLandmark(null);
     setQuestStarted(false);
     setFoundLandmarks([]);
     setNearbyLandmarks([]);
@@ -320,18 +324,9 @@ function AppContent() {
     navigate("/login");
   };
 
-  const confirmCloseQuest = () => {
-    handleEndQuest();
-    setShowCloseQuestModal(false);
-    navigate("/");
-  };
-
-  const cancelCloseQuest = () => {
-    setShowCloseQuestModal(false);
-  };
-
   return (
     <div className={`App ${questStarted ? "quest-in-progress" : ""}`}>
+      {/* ── Top Nav / Banner ── */}
       {questStarted ? (
         <div className="quest-banner">
           <h1>Quest In Progress</h1>
@@ -357,11 +352,14 @@ function AppContent() {
           </div>
         </nav>
       )}
+
+      {/* ── Main Layout ── */}
       <div
         className={`layout-container ${state.submitted ? "split-layout" : ""} ${
           questStarted ? "dimmed-content" : ""
         }`}
       >
+        {/* Side panel (forms / facts / badges) */}
         <div className="stats-badges-container">
           <div className="form-container">
             {user && !state.submitted && (
@@ -369,6 +367,7 @@ function AppContent() {
                 📍 Track Current Location
               </button>
             )}
+
             {!state.submitted ? (
               <LocationSearch
                 onSelectLocation={handleSelectLocation}
@@ -387,11 +386,12 @@ function AppContent() {
                       : "🔎 Search a New Location"}
                   </button>
                 )}
+
                 <div>
                   {loading && <p>Loading...</p>}
                   {error && <p>{error.message}</p>}
                   {demographicData && (
-                    <Suspense fallback={<div>Loading...</div>}>
+                    <Suspense fallback={<div>Loading…</div>}>
                       <DemographicData
                         funFact={demographicData.funFact}
                         badges={demographicData.badges}
@@ -413,39 +413,54 @@ function AppContent() {
             )}
           </div>
         </div>
+
+        {/* Map / Modal */}
         <div className="map-container">
-          <Suspense fallback={<div>Loading Map...</div>}>
+          <Suspense fallback={<div>Loading Map…</div>}>
             {state.location ? (
               <MapViewComponent
                 location={state.location}
                 landmarks={nearbyLandmarks}
                 selectedBasemap={selectedBasemap}
+                questStarted={questStarted}
+                currentLandmarkIndex={currentLandmarkIndex}
+                onLandmarkSelect={setSelectedLandmark}
               />
             ) : (
               <SimpleMapComponent selectedBasemap={selectedBasemap} />
             )}
+
+            {selectedLandmark && (
+              <InfoModal
+                landmark={selectedLandmark}
+                onClose={() => setSelectedLandmark(null)}
+              />
+            )}
           </Suspense>
         </div>
       </div>
+
+      {/* ── Quest Status & Controls ── */}
       <QuestStatus
         questStarted={questStarted}
         foundLandmarks={foundLandmarks.length}
         totalLandmarks={nearbyLandmarks.length}
       />
+
       {questStarted && (
         <div className="quest-buttons">
           <button onClick={handleTrackNewLocation} className="track-button">
             Track New Location
           </button>
-          <button
-            onClick={handleEndQuestButtonClick}
-            className="end-quest-button"
-          >
+          <button onClick={handleEndQuest} className="end-quest-button">
             End Quest
           </button>
         </div>
       )}
+
+      {/* ── Celebrations & Prompts ── */}
       {showAnimation && <CompletionAnimation />}
+
       {showCongrats && (
         <div className="popup-container">
           <div className="congrats-popup">
@@ -455,30 +470,12 @@ function AppContent() {
           </div>
         </div>
       )}
+
       {questEnabled && !questStarted && (
         <div className="quest-start-container">
           <button onClick={handleStartQuest} className="start-quest-button">
             Start Quest
           </button>
-        </div>
-      )}
-      {showCloseQuestModal && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <h2>Quit Quest?</h2>
-            <p>
-              Are you sure you want to quit? You will lose all progress toward
-              finishing the quest. However, visited locations will be saved.
-            </p>
-            <div className="modal-buttons">
-              <button onClick={confirmCloseQuest} className="confirm-button">
-                Yes, Quit
-              </button>
-              <button onClick={cancelCloseQuest} className="cancel-button">
-                Cancel
-              </button>
-            </div>
-          </div>
         </div>
       )}
     </div>
