@@ -28,7 +28,7 @@ Unlock the power of gamification in your React applications to create compelling
 - `src/` – React app source code  
   - `components/` – Key UI components  
   - `hooks/` – Custom hooks (e.g., `useDemographicData.js`)  
-  - `context/` – App context and providers  
+  - `utils/` – App context and providers  
 - `README.md` – This file  
 
 ---
